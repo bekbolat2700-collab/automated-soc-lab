@@ -1,0 +1,21 @@
+---
+- name: Деплой SOC инфраструктуры
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+    - name: Установка системных пакетов (включая Docker SDK)
+      apt:
+        name:
+          - curl
+          - git
+          - python3-pip
+          - python3-docker  # Заменяем pip на системный пакет
+        state: present
+        update_cache: yes
+
+    - name: Гарантировать, что контейнеры запущены
+      community.docker.docker_compose_v2:
+        project_src: /home/predator/automated-soc-lab
+        state: present
